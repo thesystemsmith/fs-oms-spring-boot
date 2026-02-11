@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -36,6 +38,20 @@ public class OrderService {
         //save to db
         Order savedOrder = orderPersistance.save(order);
         return savedOrder;
+    }
+
+    //get all orders
+    public List<Order> getAllOrders(){
+        //findAll - returns a list, empty list if no orders
+        return orderPersistance.findAll();
+    }
+
+    //get a specific order using id
+    public Order getOrderById(Long id){
+        //return null if order not found
+        Optional<Order> optionalOrder = orderPersistance.findById(id);
+
+        return optionalOrder.orElse(null); //built in method cleaner than if else or conditional
     }
 
 

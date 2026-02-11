@@ -6,10 +6,9 @@ import com.fs_oms_spring_boot.order_service.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -22,6 +21,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    //create an order
     @PostMapping
     // access responseType functionName ( dto requestBody)
     public ResponseEntity<Order> createOrder(@RequestBody CreateOrderRequest request){
@@ -33,6 +33,29 @@ public class OrderController {
         );
 
         //response
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED); //201
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED); //201 post/put
     }
+
+    // get all orders
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrders(){
+        //get the data from service
+        List<Order> orders = orderService.getAllOrders();
+
+        return new ResponseEntity<>(orders, HttpStatus.OK); //200 put/get/delete/patch
+    }
+
+    //get a specific order
+    @GetMapping("/{id}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id){ //PathVariable- reads value from url / RequestParam - reads query params after ?
+        Order order = orderService.getOrderById(id);
+
+        if (order != null) {
+            return new ResponseEntity<>(order, HttpStatus.OK); //200
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //404
+        }
+    }
+
+
 }
