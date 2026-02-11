@@ -41,8 +41,8 @@ public class OrderService {
 
     //gen unique order number
     private String generateOrderNumber() {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
-        String timestamp = LocalDateTime.now().format(fmt);
-        return "ORD-\" + timestamp"; // just to signify it's an order
+        //using uuid to avoid unique constraint error while creating order
+        return "ORD-" + java.util.UUID.randomUUID().toString().substring(0,8).toUpperCase();
+        
     }
 }
